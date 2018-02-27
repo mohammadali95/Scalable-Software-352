@@ -23,7 +23,7 @@ public class Client {
 		}
 	}
 
-	public void sendMessage(String s) {
-		
+	public void sendMessage(BufferedWriter s) {
+		this.output = s;
 	}
 }
