@@ -49,11 +49,11 @@ public class GUIPopups {
 		
 		Label hostLabel = new Label("Host: ");
 		
-		TextField hostTextField = new TextField();
-		hostTextField.setPromptText("Enter the Host here.");
-		hostTextField.setEditable(true);
+		TextField ipTextField = new TextField();
+		ipTextField.setPromptText("Enter the Host here.");
+		ipTextField.setEditable(true);
 		
-		hostHbox.getChildren().addAll(hostLabel, hostTextField);
+		hostHbox.getChildren().addAll(hostLabel, ipTextField);
 		
 		HBox titleHbox = new HBox();
 		
@@ -69,7 +69,8 @@ public class GUIPopups {
 		Button sendButton = new Button();
 		sendButton.setText("Send!");
 		sendButton.setOnAction((event) -> {
-			addToConversationList(hostTextField.getText(), nameTextField.getText());
+			addToConversationList(ipTextField.getText(), nameTextField.getText());
+			Client client = new Client(ipTextField.getText(), 7654);
 			popup.close();
 		});
 		buttonHbox.getChildren().add(sendButton);
@@ -127,7 +128,7 @@ public class GUIPopups {
 				e.printStackTrace();
 			}
 			System.out.println(writer.hashCode());
-			Client client = new Client(selectedConversation.getIP(), 80); // THIS IS THE ARBITRARY PORT NUMBER I CHOSE, WE NEED TO CHANGE THIS.
+			Client client = new Client(selectedConversation.getIP(), 7654);
 			client.sendMessage(writer);
 		});
 		

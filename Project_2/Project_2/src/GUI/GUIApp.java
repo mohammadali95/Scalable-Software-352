@@ -1,5 +1,8 @@
 package GUI;
 
+import java.io.IOException;
+
+import Network.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -21,7 +24,7 @@ public class GUIApp extends Application {
 		}
 	}
 	
-	public static void main(String[] args) {
-		launch(args);
+	public static void main(String[] args){
+		launch(args);	
 	}
 }

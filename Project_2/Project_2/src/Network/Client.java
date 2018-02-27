@@ -22,6 +22,8 @@ public class Client {
 			System.out.println(e);
 		}
 	}
+	
+	
 
 	public void sendMessage(BufferedWriter s) {
 		this.output = s;

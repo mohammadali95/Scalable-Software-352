@@ -3,6 +3,7 @@ package GUI;
 import java.util.ArrayList;
 
 import DataStructures.Conversation;
+import Network.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,6 +19,8 @@ public class GUIController {
 	
 	ArrayList<Conversation> conversationArrayList = new ArrayList<Conversation>();
 
+	Server server = new Server(7654);
+	
 	@FXML
 	public Button addConversation;
 
@@ -40,6 +43,7 @@ public class GUIController {
 	public Pane conversationViewer;
 	
 	
+	
 	@FXML
 	public void makeNewConversation() {
 		GUIPopups popups = new GUIPopups(conversationObservableList, conversationArrayList, conversationList, conversationViewer);
@@ -59,5 +63,4 @@ public class GUIController {
 		
 	}
 }
-
 

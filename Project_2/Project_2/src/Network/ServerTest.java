@@ -8,7 +8,8 @@ public class ServerTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		Server server = new Server(7654);
+		
 	}
 
 }
