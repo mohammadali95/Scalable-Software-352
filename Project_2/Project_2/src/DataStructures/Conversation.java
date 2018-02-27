@@ -1,27 +1,29 @@
 package DataStructures;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class Conversation {
 
-	private String port;
-	private String host;
+	private String ip;
 	private String name;
+	ObservableList<String> history = FXCollections.observableArrayList();
 	
-	public Conversation(String host, String port, String name) {
-		this.port = port;
-		this.host = host;
+	public Conversation(String ip, String name) {
+		this.ip = ip;
 		this.name = name;
 	}
 	
-	public String getPort() {return port;}
-	
-	public String getHost() {return host;}
+	public String getIP() {return ip;}
 	
 	public String getName() {return name;}
 	
-	public void setPort(String port) {this.port = port;}
+	public ObservableList<String> getMessageHistory() {return history;}
 	
-	public void setHost(String host) {this.host = host;}
+	public void setIP(String ip) {this.ip = ip;}
 	
 	public void setName(String name) {this.name = name;}
+	
+	public void addNewMessage(String newMessage) {history.add(newMessage);}
 
 }
