@@ -1,8 +1,12 @@
 package GUI;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import DataStructures.Conversation;
+import DataStructures.MessageSender;
+import Network.Client;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -65,7 +69,7 @@ public class GUIPopups {
 		Button sendButton = new Button();
 		sendButton.setText("Send!");
 		sendButton.setOnAction((event) -> {
-			addToConversationList(hostTextField.getText(), "1231", nameTextField.getText());
+			addToConversationList(hostTextField.getText(), nameTextField.getText());
 			popup.close();
 		});
 		buttonHbox.getChildren().add(sendButton);
@@ -76,8 +80,8 @@ public class GUIPopups {
 		popup.show();
 	}
 	
-	private void addToConversationList(String host, String port, String name) {
-		Conversation newConvo = new Conversation(host, port, name);
+	private void addToConversationList(String host, String name) {
+		Conversation newConvo = new Conversation(host, name);
 		conversationArrayList.add(newConvo);
 		conversationObservableList.add(newConvo.getName());
 		conversationList.setItems(conversationObservableList);
@@ -93,11 +97,10 @@ public class GUIPopups {
 		
 		VBox messages = new VBox();
 		
-		Label example = new Label("hello");
-		Label example1 = new Label("Hi");
-		Label example2 = new Label("How are you?");
+		ListView<String> conversationHistory = updateMessageHistory(selectedConversation);
 		
-		messages.getChildren().addAll(example, example1, example2);
+		messages.getChildren().clear();
+		messages.getChildren().add(conversationHistory);
 		
 		HBox messageWriter = new HBox();
 		
@@ -109,6 +112,24 @@ public class GUIPopups {
 		
 		Button sendMessage = new Button();
 		sendMessage.setText("Send!");
+		sendMessage.setOnAction((event) -> {
+			selectedConversation.addNewMessage(writeMessagesHere.getText());
+			writeMessagesHere.clear();
+			ListView<String> addtoConversationHistory = updateMessageHistory(selectedConversation);
+			messages.getChildren().clear();
+			messages.getChildren().add(addtoConversationHistory);
+			MessageSender sender = new MessageSender(selectedConversation);
+			BufferedWriter writer = null;
+			try {
+				writer = sender.makeTextFile();
+			} catch (IOException e) {
+				// change this try catch too.
+				e.printStackTrace();
+			}
+			System.out.println(writer.hashCode());
+			Client client = new Client(selectedConversation.getIP(), 80); // THIS IS THE ARBITRARY PORT NUMBER I CHOSE, WE NEED TO CHANGE THIS.
+			client.sendMessage(writer);
+		});
 		
 		messageWriter.getChildren().addAll(writeMessagesHere, addFile, sendMessage);
 		
@@ -119,6 +140,14 @@ public class GUIPopups {
 		conversationViewer.getChildren().add(conversation);
 	}
 	
+	private ListView<String> updateMessageHistory(Conversation selectedConversation) {
+		ObservableList<String> messageHistory = selectedConversation.getMessageHistory();
+		ListView<String> listview = new ListView<String>();		
+		listview.setItems(messageHistory);
+		
+		return listview;
+	}
+
 	public ObservableList<String> getConversationObservableList() {return conversationObservableList;}
 	
 	public ArrayList<Conversation> getConversationArrayList() {return conversationArrayList;}
