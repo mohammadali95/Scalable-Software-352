@@ -4,14 +4,10 @@ import java.net.*;
 import java.io.*;
 
 public class Client {
-	
+
 	private Socket socket;
-	private BufferedReader input;
-	private BufferedWriter output;
-	private Reader Conversation;
-	private Writer WriteToConversation;
-	
-	public Client(String host, int port){
+
+	public Client(String host, int port) {
 		try {
 			socket = new Socket(host, port);
 		} catch (UnknownHostException h) {
@@ -20,10 +16,16 @@ public class Client {
 			System.out.println(e);
 		}
 	}
-	
-	
 
-	public void sendMessage(BufferedWriter s) {
-		this.output = s;
+
+
+	public void sendMessage(String s) throws IOException {
+		// When this is called the socket it is referencing does not exit
+		// resulting in a NullPointerException :(
+		byte[] bytes = s.getBytes();
+		OutputStream os = socket.getOutputStream();
+		os.write(bytes);
+		os.flush();
+		os.close();
 	}
 }
