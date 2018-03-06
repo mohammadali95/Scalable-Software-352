@@ -14,8 +14,6 @@ public class Client {
 	public Client(String host, int port){
 		try {
 			socket = new Socket(host, port);
-			input = new BufferedReader(Conversation);
-			output = new BufferedWriter(WriteToConversation);
 		} catch (UnknownHostException h) {
 			System.out.println(h);
 		} catch (IOException e) {

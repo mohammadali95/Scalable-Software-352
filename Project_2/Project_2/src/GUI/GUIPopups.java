@@ -70,7 +70,7 @@ public class GUIPopups {
 		sendButton.setText("Send!");
 		sendButton.setOnAction((event) -> {
 			addToConversationList(ipTextField.getText(), nameTextField.getText());
-			Client client = new Client(ipTextField.getText(), 7654);
+			Client client = new Client(ipTextField.getText(), 22223);
 			popup.close();
 		});
 		buttonHbox.getChildren().add(sendButton);
@@ -128,7 +128,7 @@ public class GUIPopups {
 				e.printStackTrace();
 			}
 			System.out.println(writer.hashCode());
-			Client client = new Client(selectedConversation.getIP(), 7654);
+			Client client = new Client(selectedConversation.getIP(), 22223);
 			client.sendMessage(writer);
 		});
 		

@@ -12,15 +12,12 @@ public class Server {
 	private Socket socket;
 	private BufferedReader input;
 	private Reader Conversation;
-	private int port = 7654;
+	private int port;
 	
 	public Server(int port){
 		try {
-			server = new ServerSocket(this.port);
-			Reader Conversation = new FileReader("");
-			WaitingForConnection waiting = new WaitingForConnection(server);
-			waiting.run();
-			input = new BufferedReader(Conversation);
+			server = new ServerSocket(port);
+			new WaitingForConnection(server).start();
 		}catch(IOException i) {
 			System.out.println(i);
 		} 

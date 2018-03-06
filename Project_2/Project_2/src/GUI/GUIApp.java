@@ -28,3 +28,7 @@ public class GUIApp extends Application {
 		launch(args);	
 	}
 }
+
+// platform.runlater(() -> {do gui updates in here})
+// inetaddress.getlocalhost.gethostaddress
+// 

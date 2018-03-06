@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import DataStructures.Conversation;
 import Network.*;
+import Threads.WaitingForConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,7 +20,7 @@ public class GUIController {
 	
 	ArrayList<Conversation> conversationArrayList = new ArrayList<Conversation>();
 
-	Server server = new Server(7654);
+	Server server = new Server(22223);
 	
 	@FXML
 	public Button addConversation;
@@ -41,8 +42,6 @@ public class GUIController {
 	
 	@FXML
 	public Pane conversationViewer;
-	
-	
 	
 	@FXML
 	public void makeNewConversation() {

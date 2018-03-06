@@ -10,21 +10,22 @@ public class WaitingForConnection extends Thread{
 	ServerSocket s;
 	SocketListener listener;
 	Socket connectingSocket;
+	
 	public WaitingForConnection(ServerSocket s) {
 		this.s = s;
 	}
 	
 	@Override
 	public void run() {
-		try {
-			connectingSocket = s.accept();	
-			new Thread(() -> {listener.receiveSocket(connectingSocket);}).start();
-		} catch (IOException e) {
-			System.out.println(e);
-		}
+		new Thread(() -> {try {
+			connectingSocket = s.accept();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}}).start();
 	}
 	
 	public Socket getConnectingSocket() {
 		return connectingSocket;
 	}
 }
+// need to close ssockets at some point
