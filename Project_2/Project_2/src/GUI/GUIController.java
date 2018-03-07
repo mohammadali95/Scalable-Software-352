@@ -20,9 +20,10 @@ public class GUIController {
 	ArrayList<Conversation> conversationArrayList = new ArrayList<Conversation>();
 
 	@FXML
-	public ListView<String> messageList;
+	public ListView<String> messageListView = new ListView<String>();
 
-	Server server = new Server(22223, messageList);
+	@FXML
+	public ListView<String> conversationListView = new ListView<String>();
 
 	@FXML
 	public Button addConversation;
@@ -33,8 +34,6 @@ public class GUIController {
 	@FXML
 	public AnchorPane listPane;
 
-	@FXML
-	public ListView<String> conversationList;
 
 	@FXML
 	public SplitPane splitpane;
@@ -45,21 +44,23 @@ public class GUIController {
 	@FXML
 	public Pane conversationViewer;
 
+	Server server = new Server(messageListView, conversationListView, conversationArrayList, conversationObservableList);
+
 	@FXML
 	public void makeNewConversation() {
-		GUIPopups popups = new GUIPopups(conversationObservableList, conversationArrayList, conversationList, conversationViewer, messageList);
+		GUIPopups popups = new GUIPopups(conversationObservableList, conversationArrayList, conversationListView, conversationViewer, messageListView);
 		popups.newConversation();
 		conversationObservableList = popups.getConversationObservableList();
 		conversationArrayList = popups.getConversationArrayList();
-		conversationList = popups.getConversationList();
+		conversationListView = popups.getConversationList();
 	}
 
 	@FXML
 	private void gotoConversation() {
-		GUIPopups popups = new GUIPopups(conversationObservableList, conversationArrayList, conversationList, conversationViewer, messageList);
+		GUIPopups popups = new GUIPopups(conversationObservableList, conversationArrayList, conversationListView, conversationViewer, messageListView);
 		popups.toConversation();
 		conversationArrayList = popups.getConversationArrayList();
-		conversationList = popups.getConversationList();
+		conversationListView = popups.getConversationList();
 		conversationViewer = popups.getConversationViewer();
 
 	}

@@ -27,7 +27,7 @@ public class GUIPopups {
 
 	private ListView<String> conversationList;
 
-	private ListView<String> messageList;
+	private ListView<String> messageList = new ListView<String>();
 
 	public Pane conversationViewer;
 
@@ -116,7 +116,7 @@ public class GUIPopups {
 
 		VBox messages = new VBox();
 
-		messageList = updateMessageHistory(selectedConversation);
+		updateMessageHistory(selectedConversation);
 
 		messages.getChildren().clear();
 		messages.getChildren().add(messageList);
@@ -136,9 +136,9 @@ public class GUIPopups {
 
 			selectedConversation.addNewMessage(writeMessagesHere.getText());
 			writeMessagesHere.clear();
-			ListView<String> addtoConversationHistory = updateMessageHistory(selectedConversation);
+			updateMessageHistory(selectedConversation);
 			messages.getChildren().clear();
-			messages.getChildren().add(addtoConversationHistory);
+			messages.getChildren().add(messageList);
 
 			MessageSender sender = new MessageSender(selectedConversation.getMessageHistory());
 			String senderStr = sender.toString();
@@ -155,12 +155,9 @@ public class GUIPopups {
 		conversationViewer.getChildren().add(conversation);
 	}
 
-	private ListView<String> updateMessageHistory(Conversation selectedConversation) {
+	private void updateMessageHistory(Conversation selectedConversation) {
 		ObservableList<String> messageHistory = selectedConversation.getMessageHistory();
-		ListView<String> listview = new ListView<String>();
-		listview.setItems(messageHistory);
-
-		return listview;
+		messageList.setItems(messageHistory);
 	}
 
 	public ObservableList<String> getConversationObservableList() {return conversationObservableList;}
