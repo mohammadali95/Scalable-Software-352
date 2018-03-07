@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import DataStructures.Conversation;
 import DataStructures.MessageSender;
+import Files.AddImage;
 import Network.Client;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -128,6 +129,11 @@ public class GUIPopups {
 		writeMessagesHere.setEditable(true);
 		Button addFile = new Button();
 		addFile.setText("Add File");
+		addFile.setOnAction((event) -> {
+
+			new AddImage();
+
+		});
 
 		Button sendMessage = new Button();
 		sendMessage.setText("Send!");
