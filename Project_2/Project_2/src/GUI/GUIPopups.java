@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import DataStructures.Conversation;
-import DataStructures.MessageReceiver;
 import DataStructures.MessageSender;
 import Network.Client;
 import javafx.collections.FXCollections;
@@ -31,6 +30,12 @@ public class GUIPopups {
 	private ListView<String> messageList;
 
 	public Pane conversationViewer;
+
+	public Client client;
+
+	public String host;
+
+	public int port = 22223;
 
 
 	public GUIPopups(ObservableList<String> conversationObservableList, ArrayList<Conversation> conversationArrayList, ListView<String> conversationList, Pane conversationViewer, ListView<String> messageList) {
@@ -73,10 +78,9 @@ public class GUIPopups {
 		sendButton.setText("Send!");
 		sendButton.setOnAction((event) -> {
 			addToConversationList(ipTextField.getText(), nameTextField.getText());
-			@SuppressWarnings("unused")
-			Client client = new Client(ipTextField.getText(), 22223);
 			popup.close();
 		});
+
 		buttonHbox.getChildren().add(sendButton);
 
 		layout.getChildren().addAll(hostHbox, titleHbox, buttonHbox);
@@ -84,6 +88,16 @@ public class GUIPopups {
 		popup.setScene(popupscene);
 		popup.show();
 	}
+
+	private void sendMessageButton(String ip, int port, String message) {
+		try {
+			Client client = new Client(ip, port, message);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+
 
 	private void addToConversationList(String host, String name) {
 		Conversation newConvo = new Conversation(host, name);
@@ -118,6 +132,8 @@ public class GUIPopups {
 		Button sendMessage = new Button();
 		sendMessage.setText("Send!");
 		sendMessage.setOnAction((event) -> {
+
+
 			selectedConversation.addNewMessage(writeMessagesHere.getText());
 			writeMessagesHere.clear();
 			ListView<String> addtoConversationHistory = updateMessageHistory(selectedConversation);
@@ -126,19 +142,8 @@ public class GUIPopups {
 
 			MessageSender sender = new MessageSender(selectedConversation.getMessageHistory());
 			String senderStr = sender.toString();
-
-			Client client = new Client(selectedConversation.getIP(), 22223);
-			try {
-				client.sendMessage(senderStr);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+			sendMessageButton(selectedConversation.getIP(), 22223, senderStr);
 			// I think this is all the code I need now that the update GUI is inside of the Server
-			try {
-				client.sendMessage(senderStr);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		});
 
 		messageWriter.getChildren().addAll(writeMessagesHere, addFile, sendMessage);
