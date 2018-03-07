@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 import DataStructures.MessageReceiver;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
@@ -19,7 +20,8 @@ public class UpdateGUI {
 		String messageStr = is.readLine();
 		MessageReceiver receiver = new MessageReceiver(messageStr);
 		ObservableList<String> messageList = receiver.toList();
-		listview.setItems(messageList);
+		System.out.println(messageList.toString());
+		Platform.runLater(() -> {listview.setItems(messageList);});
 	}
 
 }
