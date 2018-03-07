@@ -17,7 +17,7 @@ public class MessageSender {
 			if (x == 0) {
 				result = messages.get(0);
 			} else {
-				result = result + "§" + messages.get(x);
+				result = result + "///" + messages.get(x);
 			}
 		}
 		return result;
