@@ -19,8 +19,7 @@ public class UpdateGUI {
 		String messageStr = is.readLine();
 		MessageReceiver receiver = new MessageReceiver(messageStr);
 		ObservableList<String> messageList = receiver.toList();
-		System.out.println(messageList.get(0));
-		//listview.setItems(messageList);
+		listview.setItems(messageList);
 	}
 
 }
