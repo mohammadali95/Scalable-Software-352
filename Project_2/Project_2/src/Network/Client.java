@@ -7,7 +7,7 @@ public class Client {
 
 	private Socket socket;
 
-	public Client(String host, int port) {
+	public Client(String host, int port, String message) throws IOException {
 		try {
 			socket = new Socket(host, port);
 		} catch (UnknownHostException h) {
@@ -15,17 +15,11 @@ public class Client {
 		} catch (IOException e) {
 			System.out.println(e);
 		}
-	}
-
-
-
-	public void sendMessage(String s) throws IOException {
-		// When this is called the socket it is referencing does not exit
-		// resulting in a NullPointerException :(
-		byte[] bytes = s.getBytes();
+		byte[] bytes = message.getBytes();
 		OutputStream os = socket.getOutputStream();
 		os.write(bytes);
 		os.flush();
 		os.close();
+		socket.close();
 	}
 }

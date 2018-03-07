@@ -10,14 +10,11 @@ import java.io.*;
 public class Server {
 
 	private ServerSocket server;
-	private Socket socket;
-	private BufferedReader input;
-	private Reader Conversation;
-	private int port;
 
 	public Server(int port, ListView<String> listview){
 		try {
 			server = new ServerSocket(port);
+			System.out.println("inside of server");
 			new WaitingForConnection(server, listview).start();
 		}catch(IOException i) {
 			System.out.println(i);
