@@ -11,17 +11,26 @@ public class WaitingForConnection extends Thread{
 	ServerSocket s;
 	SocketListener listener;
 	Socket connectingSocket;
+	ListView<String> listview;
 
 	public WaitingForConnection(ServerSocket s, ListView<String> listview) {
 		this.s = s;
+		this.listview = listview;
+	}
+
+	@Override
+	public void start() {
+		run();
 	}
 
 	@Override
 	public void run() {
 		new Thread(() -> {try {
+			System.out.println("inside of thread");
 			connectingSocket = s.accept();
+			new UpdateGUI(connectingSocket, listview);
 			// run update gui here??
-			System.out.println(connectingSocket.getInetAddress());
+			new WaitingForConnection(s, listview).start();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}}).start();
