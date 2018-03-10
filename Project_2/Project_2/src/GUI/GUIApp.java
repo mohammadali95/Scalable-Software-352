@@ -23,11 +23,8 @@ public class GUIApp extends Application {
 			System.exit(1);
 		}
 	}
-
+	
 	public static void main(String[] args){
 		launch(args);
 	}
 }
-
-// platform.runlater(() -> {do gui updates in here})
-// inetaddress.getlocalhost.gethostaddress

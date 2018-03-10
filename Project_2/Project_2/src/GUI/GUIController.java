@@ -3,6 +3,7 @@ package GUI;
 import java.util.ArrayList;
 
 import DataStructures.Conversation;
+import DataStructures.ConversationContainer;
 import Network.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,52 +16,36 @@ import javafx.scene.layout.Pane;
 
 public class GUIController {
 
-	ObservableList<String> conversationObservableList = FXCollections.observableArrayList();
-
-	ArrayList<Conversation> conversationArrayList = new ArrayList<Conversation>();
-
-	@FXML
-	public ListView<String> messageList;
-
-	Server server = new Server(22223, messageList);
+	private ArrayList<Conversation> conversationArrayList = new ArrayList<Conversation>();
+	
+	private ObservableList<String> conversationObservableList = FXCollections.observableArrayList();
 
 	@FXML
-	public Button addConversation;
-
+	public ListView<String> conversationList = new ListView<String>();
+	
 	@FXML
-	public AnchorPane buttonPane;
-
-	@FXML
-	public AnchorPane listPane;
-
-	@FXML
-	public ListView<String> conversationList;
-
-	@FXML
-	public SplitPane splitpane;
-
-	@FXML
-	public Button gotoButton;
-
+	public ListView<String> messageList = new ListView<String>();
+	
 	@FXML
 	public Pane conversationViewer;
-
+	
+	@FXML
+	public void initialize() {
+		ConversationContainer conversationContainer = new ConversationContainer(conversationArrayList, conversationObservableList, conversationList);
+		Server server = new Server(conversationContainer, messageList, conversationViewer);
+	}
+	
 	@FXML
 	public void makeNewConversation() {
-		GUIPopups popups = new GUIPopups(conversationObservableList, conversationArrayList, conversationList, conversationViewer, messageList);
+		ConversationContainer conversationContainer = new ConversationContainer(conversationArrayList, conversationObservableList, conversationList);
+		GUIPopups popups = new GUIPopups(conversationContainer, conversationViewer, messageList);
 		popups.newConversation();
-		conversationObservableList = popups.getConversationObservableList();
-		conversationArrayList = popups.getConversationArrayList();
-		conversationList = popups.getConversationList();
 	}
 
 	@FXML
 	private void gotoConversation() {
-		GUIPopups popups = new GUIPopups(conversationObservableList, conversationArrayList, conversationList, conversationViewer, messageList);
+		ConversationContainer conversationContainer = new ConversationContainer(conversationArrayList, conversationObservableList, conversationList);
+		GUIPopups popups = new GUIPopups(conversationContainer, conversationViewer, messageList);
 		popups.toConversation();
-		conversationArrayList = popups.getConversationArrayList();
-		conversationList = popups.getConversationList();
-		conversationViewer = popups.getConversationViewer();
-
 	}
 }

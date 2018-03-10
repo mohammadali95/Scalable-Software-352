@@ -8,7 +8,6 @@ public class ServerTest {
 
 	@Test
 	public void test() {
-	//	Server server = new Server(7777);
 		
 	}
 

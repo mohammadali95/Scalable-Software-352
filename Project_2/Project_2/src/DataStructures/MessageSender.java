@@ -3,13 +3,13 @@ package DataStructures;
 import javafx.collections.ObservableList;
 
 public class MessageSender {
-
+	
 	ObservableList<String> messages;
 
 	public MessageSender(ObservableList<String> messages) {
 		this.messages = messages;
 	}
-
+	
 	@Override
 	public String toString() {
 		String result = "";

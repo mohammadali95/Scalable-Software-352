@@ -6,11 +6,11 @@ import javafx.collections.ObservableList;
 public class MessageReceiver {
 
 	String messages;
-
+	
 	public MessageReceiver(String messages) {
 		this.messages = messages;
 	}
-
+	
 	public ObservableList<String> toList() {
 		ObservableList<String> result = FXCollections.observableArrayList();
 		String[] split = messages.split("///");

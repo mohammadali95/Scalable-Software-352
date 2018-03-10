@@ -22,4 +22,19 @@ public class Client {
 		os.close();
 		socket.close();
 	}
+	
+	public Client(String host, int port, byte[] bytes) throws IOException {
+		try {
+			socket = new Socket(host, port);
+		} catch (UnknownHostException h) {
+			System.out.println(h);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		OutputStream os = socket.getOutputStream();
+		os.write(bytes);
+		os.flush();
+		os.close();
+		socket.close();
+	}
 }

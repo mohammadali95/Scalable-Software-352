@@ -2,19 +2,23 @@ package Threads;
 
 import java.net.*;
 
+import DataStructures.ConversationContainer;
 import Network.*;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
 
 import java.io.*;
 
 public class WaitingForConnection extends Thread{
 	ServerSocket s;
 	Socket connectingSocket;
-	ListView<String> listview = new ListView<String>();
+	ConversationContainer conversationContainer;
+	Pane conversationViewer;
 
-	public WaitingForConnection(ServerSocket s, ListView<String> listview) {
+	public WaitingForConnection(ServerSocket s, ConversationContainer conversationContainer, Pane conversationViewer) {
 		this.s = s;
-		this.listview = listview;
+		this.conversationContainer = conversationContainer;
+		this.conversationViewer = conversationViewer;
 	}
 
 	@Override
@@ -25,11 +29,10 @@ public class WaitingForConnection extends Thread{
 	@Override
 	public void run() {
 		new Thread(() -> {try {
-			System.out.println("inside of thread");
 			connectingSocket = s.accept();
-			new UpdateGUI(connectingSocket, listview);
+			new UpdateGUI(connectingSocket, conversationContainer, conversationViewer);
 			// run update gui here??
-			new WaitingForConnection(s, listview).start();
+			new WaitingForConnection(s, conversationContainer, conversationViewer).start();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}}).start();
