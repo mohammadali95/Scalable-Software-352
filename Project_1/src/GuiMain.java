@@ -16,7 +16,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class GuiMain extends Application {
-		
+	
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		FXMLLoader loader = new FXMLLoader();

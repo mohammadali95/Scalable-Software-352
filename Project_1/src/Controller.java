@@ -8,6 +8,9 @@ import com.sun.glass.ui.MenuBar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -15,12 +18,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 public class Controller {
 
 
 	private SongList list = new SongList();
+	private FXMLLoader fxmlLoader;
 
 	
 
@@ -74,15 +79,6 @@ private Button cropButton;
 public ListView<String> listSongs;
 ObservableList<String> samples =  FXCollections.observableArrayList();
 
-@FXML 
-private ChoiceBox choiceButton;
-
-@FXML
-private void initialize() {
-	choiceButton.setItems(FXCollections.observableArrayList(
-		    "Add Effects"));
-		
-}
 
 @FXML
 void close() {
@@ -104,24 +100,28 @@ void about() {
 
 @FXML
 private void uploadFile() throws IOException, LineUnavailableException, UnsupportedAudioFileException {
-	File file = getDataFile1();
-	//System.out.println("this was so easy:" + file.getName());
-	//if (checkType(file)) {
-		
+
+		File file = getDataFile();
+		if (checkType(file)) {
 		String fil = (file.getCanonicalPath());
 		Integer idx = fil.lastIndexOf('/');
 		String filString = fil.substring(idx +1);
 		list.addMap(filString, fil);
 		samples.add(filString);
-		
-	updateListView();
+		updateListView();
+		}
+	
+		else {
+			errShow("Please choose a Mp3 File");
+
+		}
 	
 	
 	
 }
-private File getDataFile1() {
+private File getDataFile() {
 	FileChooser chooser = new FileChooser();
-	chooser.setTitle("Select test data");
+	chooser.setTitle("Select Song");
 	return chooser.showOpenDialog(null);
 	
 	
@@ -135,26 +135,47 @@ private void updateListView() {
 }
 
 
-private Boolean checkType(File file) {
-	// TODO Auto-generated method stub
+private Boolean checkType(File file) throws IOException {
+	String fil = (file.getCanonicalPath());
+	String [] split = fil.split("\\.");
+	System.out.println(fil);
 	
-	
-	return null;
-}
-
+	System.out.println(split[1]);
+	if (split[1].equals("mp3")) {
+		return true;
+	}
+	else {
+		return false;
+	}
+	}
+// Should remove from my hashmap too which I don't do here. 
+// I think I should have had two hashmaps. 
 @FXML 
 private void addToPlay() {
+	if (listSongs.getSelectionModel().getSelectedItem()== null) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("Whoa!");
+		alert.setContentText("Gotta select a song to add!");
+		alert.show();
+	}
+	else {
 	String songToPlay = listSongs.getSelectionModel().getSelectedItem();
 	final int songRm = listSongs.getSelectionModel().getSelectedIndex();
 	pSongs.add(songToPlay);
 	samples.remove(songRm);
 	updateListView();
 	playSongs.setItems(pSongs);
+	}
 }
 
 
 	@FXML
-	private void playSong() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+	private void playSong() throws LineUnavailableException, IOException, UnsupportedAudioFileException, InterruptedException {
+				if (playSongs.getSelectionModel().getSelectedItem() == null) {
+					errShow("Please select a song to Play");
+				}
+				else {
 				String songToPlay = playSongs.getSelectionModel().getSelectedItem();
 				System.out.println("song:" + songToPlay);
 				if (!songToPlay.equals(currSong)) {
@@ -165,24 +186,20 @@ private void addToPlay() {
 						list.playSong(songToPlay);
 						playButton.setText("Pause");
 					}
-						
 				}
-				
 				else {
 					if (playButton.getText().equals("Play")) {
 						list.resume();
 						playButton.setText("Pause");
 					}
-					
 					else {
-					
 					playButton.setText("Play");
 					list.pauseSound();
 					}
 				}
-
-
-			}
+				Double length = list.getLength(songToPlay);
+				}
+}
 	
 	@FXML
 	private void stop() {
@@ -201,24 +218,56 @@ private void addToPlay() {
 	
 	@FXML
 	private void delete() {
-		String songToDelete = playSongs.getSelectionModel().getSelectedItem();
+		if ((listSongs.getSelectionModel().getSelectedItem() == null) && (playSongs.getSelectionModel().getSelectedItem() == null)  ) {
+			errShow("Please select a song to Remove");
+		}
+		else if (listSongs.getSelectionModel().getSelectedItem() != null) {
+		final String songToDelete = listSongs.getSelectionModel().getSelectedItem();
+		final int indexToDelete = listSongs.getSelectionModel().getSelectedIndex();
+		samples.remove(indexToDelete);
+		updateListView();
+		
+		
+	}
+		else {
+			
+		final String songToDelete = playSongs.getSelectionModel().getSelectedItem();
 		final int indexToDelete = playSongs.getSelectionModel().getSelectedIndex();
 		if (songToDelete.equals(currSong)) {
-			//System.out.println(list.mp.getMedia().toString());
-			//System.out.println(currSong);
 		list.stop();
-		list.songMap.remove(songToDelete);
 		pSongs.remove(indexToDelete);
+		samples.add(songToDelete);
 		playSongs.setItems(pSongs);
 		playButton.setText("Play");
 	}
 		else {
-			System.out.println(list.mp.getMedia().toString());
-			System.out.println(currSong);
-			list.songMap.remove(songToDelete);
 			pSongs.remove(indexToDelete);
+			samples.add(songToDelete);
 			playSongs.setItems(pSongs);
 		}
+		}
+		}
+		
+	
+	@FXML
+	private void crop() throws IOException {
+		Stage stage = new Stage();
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("playFromGui.fxml"));     
+		Parent root = (Parent)fxmlLoader.load();          
+		PlayFromController controller = fxmlLoader.<PlayFromController>getController();
+		controller.setSongList(list);
+		Scene scene = new Scene(root); 
+		stage.setScene(scene);    
+		stage.showAndWait();
+		playButton.setText("Pause");
+	}
+	
+	public void errShow(String error) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Error");
+		alert.setHeaderText("Whoa!");
+		alert.setContentText(error);
+		alert.show();
 	}
 
 
